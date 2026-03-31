@@ -14,6 +14,7 @@ const Navigation = () => {
     { href: '/about', label: 'About' },
     { href: '/clients', label: 'Business', region: 'India' },
     { href: '/us-clients', label: 'Business', region: 'USA' },
+    { href: '/software', label: 'Software' },
     { href: '/innovations', label: 'Innovations' },
     { href: '/media', label: 'Media' },
     { href: '/spirituality', label: 'Spirituality' },
