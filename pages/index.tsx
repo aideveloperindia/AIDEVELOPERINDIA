@@ -3,8 +3,8 @@ import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { FiEye, FiLinkedin, FiPlay } from 'react-icons/fi';
+import { motion, useInView } from 'framer-motion';
+import { FiEye, FiLinkedin, FiMessageCircle, FiPlay } from 'react-icons/fi';
 
 const projectMarquee = [
   'Gopisarvepalli',
@@ -260,9 +260,134 @@ const courseMindMap02 = [
   },
 ];
 
+const TypedScratchLine = ({
+  text,
+  startDelayMs,
+  active,
+}: {
+  text: string;
+  startDelayMs: number;
+  active: boolean;
+}) => {
+  const [visibleChars, setVisibleChars] = useState(0);
+
+  useEffect(() => {
+    if (!active) {
+      setVisibleChars(0);
+      return;
+    }
+
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+
+    timeoutId = setTimeout(() => {
+      intervalId = setInterval(() => {
+        setVisibleChars((prev) => {
+          if (prev >= text.length) {
+            if (intervalId) clearInterval(intervalId);
+            return text.length;
+          }
+          return prev + 1;
+        });
+      }, 64);
+    }, startDelayMs);
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [active, startDelayMs, text]);
+
+  const progress = text.length > 0 ? visibleChars / text.length : 1;
+  const remainingWidth = Math.max(0, 100 - progress * 100);
+
+  return (
+    <li className="relative min-h-[1.4rem] overflow-hidden">
+      <span className="relative z-10 text-white/85">{`- ${text.slice(0, visibleChars)}`}</span>
+      {visibleChars < text.length && (
+        <span
+          className="absolute inset-y-0 right-0 rounded-sm bg-gradient-to-r from-violet-300/35 via-indigo-300/35 to-cyan-200/35"
+          style={{ width: `${remainingWidth}%` }}
+        >
+          <span className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 h-3 w-3 rounded-full bg-cyan-100 shadow-[0_0_12px_rgba(165,243,252,0.95)] animate-pulse" />
+        </span>
+      )}
+    </li>
+  );
+};
+
+const MindMapCard = ({
+  section,
+  idx,
+  activeCourse,
+}: {
+  section: { title: string; points: string[] };
+  idx: number;
+  activeCourse: '0.1' | '0.2';
+}) => {
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const cardInView = useInView(cardRef, { once: true, amount: 0.45 });
+  const left = idx % 2 === 0;
+  const baseDelay = idx * 0.12;
+
+  return (
+    <div ref={cardRef} key={`${activeCourse}-${section.title}`} className="relative pb-6">
+      {idx > 0 && (
+        <motion.div
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
+          transition={{ duration: 0.28, delay: baseDelay, ease: 'easeOut' }}
+          className="absolute left-4 md:left-1/2 md:-translate-x-1/2 top-0 h-10 w-px bg-indigo-300/70 origin-top"
+        />
+      )}
+
+      <motion.div
+        initial={{ scale: 0.3, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.22, delay: baseDelay + 0.2 }}
+        className="absolute left-4 md:left-1/2 md:-translate-x-1/2 top-10 h-3 w-3 rounded-full bg-indigo-300 shadow-[0_0_0_5px_rgba(99,102,241,0.35)]"
+      />
+
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.24, delay: baseDelay + 0.26, ease: 'easeOut' }}
+        className={`hidden md:block absolute top-[2.85rem] h-px bg-indigo-300/70 ${
+          left ? 'right-1/2 w-12 origin-right' : 'left-1/2 w-12 origin-left'
+        }`}
+      />
+
+      <div className={`pt-6 pl-12 md:pl-0 ${left ? 'md:pr-12 md:mr-[50%]' : 'md:pl-12 md:ml-[50%]'}`}>
+        <motion.div
+          initial={{ opacity: 0, x: left ? -24 : 24, y: 10 }}
+          animate={{ opacity: 1, x: 0, y: 0 }}
+          transition={{ duration: 0.32, delay: baseDelay + 0.32 }}
+          className="relative rounded-xl neo-dark-panel p-4"
+        >
+          <span className="absolute top-2 right-3 text-[10px] text-cyan-200/90 animate-pulse">✦</span>
+          <span className="absolute bottom-2 left-3 text-[10px] text-fuchsia-200/90 animate-pulse">✦</span>
+          <h4 className="font-semibold text-white mb-2">{section.title}</h4>
+          <ul className="space-y-1.5 text-sm text-white/80">
+            {section.points.map((point, pIdx) => (
+              <TypedScratchLine
+                key={`${activeCourse}-${section.title}-${pIdx}`}
+                text={point}
+                startDelayMs={pIdx * 880}
+                active={cardInView}
+              />
+            ))}
+          </ul>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
 const Home = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const rafRef = useRef<number | null>(null);
+  const courseSectionRef = useRef<HTMLElement | null>(null);
+  const courseInView = useInView(courseSectionRef, { once: false, amount: 0.2 });
   const [activeCourse, setActiveCourse] = useState<'0.1' | '0.2'>('0.1');
   const activeMindMap = activeCourse === '0.1' ? courseMindMap01 : courseMindMap02;
 
@@ -452,6 +577,7 @@ const Home = () => {
       </div>
 
       <section
+        ref={courseSectionRef}
         className="text-white pt-20 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
         style={{ backgroundColor: 'hsl(var(--hero-bg))' }}
       >
@@ -460,6 +586,13 @@ const Home = () => {
           <div className="absolute bottom-10 right-8 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl" />
         </div>
         <div className="container-width">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl md:text-5xl font-bold mb-3">JOIN AI PROGRAM</h2>
+            <p className="text-white/80 max-w-2xl mx-auto mb-3">
+              Choose your level and start building with a real delivery-oriented path.
+            </p>
+          </div>
+
           <div className="text-center mb-8">
             <h2 className="text-3xl md:text-4xl font-bold mb-3">AI Course Mind Map</h2>
             <p className="text-white/75 max-w-2xl mx-auto">
@@ -503,56 +636,27 @@ const Home = () => {
             </div>
 
             <div className="space-y-1">
-              {activeMindMap.map((section, idx) => {
-                const left = idx % 2 === 0;
-                const baseDelay = idx * 0.12;
-                return (
-                  <div key={`${activeCourse}-${section.title}`} className="relative pb-6">
-                    {idx > 0 && (
-                      <motion.div
-                        initial={{ scaleY: 0 }}
-                        animate={{ scaleY: 1 }}
-                        transition={{ duration: 0.28, delay: baseDelay, ease: 'easeOut' }}
-                        className="absolute left-4 md:left-1/2 md:-translate-x-1/2 top-0 h-10 w-px bg-indigo-300/70 origin-top"
-                      />
-                    )}
+              {activeMindMap.map((section, idx) => (
+                <MindMapCard key={`${activeCourse}-${section.title}`} section={section} idx={idx} activeCourse={activeCourse} />
+              ))}
+            </div>
 
-                    <motion.div
-                      initial={{ scale: 0.3, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ duration: 0.22, delay: baseDelay + 0.2 }}
-                      className="absolute left-4 md:left-1/2 md:-translate-x-1/2 top-10 h-3 w-3 rounded-full bg-indigo-300 shadow-[0_0_0_5px_rgba(99,102,241,0.35)]"
-                    />
-
-                    <motion.div
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      transition={{ duration: 0.24, delay: baseDelay + 0.26, ease: 'easeOut' }}
-                      className={`hidden md:block absolute top-[2.85rem] h-px bg-indigo-300/70 ${
-                        left ? 'right-1/2 w-12 origin-right' : 'left-1/2 w-12 origin-left'
-                      }`}
-                    />
-
-                    <div className={`pt-6 pl-12 md:pl-0 ${left ? 'md:pr-12 md:mr-[50%]' : 'md:pl-12 md:ml-[50%]'}`}>
-                      <motion.div
-                        initial={{ opacity: 0, x: left ? -24 : 24, y: 10 }}
-                        animate={{ opacity: 1, x: 0, y: 0 }}
-                        transition={{ duration: 0.32, delay: baseDelay + 0.32 }}
-                        className="relative rounded-xl neo-dark-panel p-4"
-                      >
-                        <span className="absolute top-2 right-3 text-[10px] text-cyan-200/90 animate-pulse">✦</span>
-                        <span className="absolute bottom-2 left-3 text-[10px] text-fuchsia-200/90 animate-pulse">✦</span>
-                        <h4 className="font-semibold text-white mb-2">{section.title}</h4>
-                        <ul className="space-y-1.5 text-sm text-white/80">
-                          {section.points.map((point) => (
-                            <li key={point}>- {point}</li>
-                          ))}
-                        </ul>
-                      </motion.div>
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href={
+                  activeCourse === '0.1'
+                    ? 'https://wa.me/919505009699?text=Hi%20Aditya%2C%20I%20want%20to%20enroll%20in%20AI%20Course%200.1.%20Please%20share%20batch%20details%2C%20fees%2C%20and%20next%20steps.'
+                    : 'https://wa.me/919505009699?text=Hi%20Aditya%2C%20I%20want%20to%20enroll%20in%20AI%20Course%200.2.%20Please%20share%20batch%20details%2C%20fees%2C%20and%20next%20steps.'
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto text-center px-6 py-3 rounded-full bg-green-600 hover:bg-green-700 text-white font-semibold transition-colors"
+              >
+                <span className="inline-flex items-center gap-2">
+                  <FiMessageCircle size={18} />
+                  Chat on WhatsApp
+                </span>
+              </a>
             </div>
           </div>
         </div>
