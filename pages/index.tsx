@@ -12,41 +12,59 @@ type MarqueeClient = {
   blurb: string;
   status: 'client' | 'in-progress' | 'startup' | 'pro-bono' | 'innovation';
   enterpriseGrade?: boolean;
+  logoShape?: 'circle' | 'square' | 'rect';
+};
+
+const logoShapeClass: Record<'circle' | 'square' | 'rect', string> = {
+  circle: 'w-16 h-16 md:w-20 md:h-20 rounded-full p-1.5',
+  square: 'w-16 h-16 md:w-20 md:h-20 rounded-2xl p-2',
+  rect: 'h-14 md:h-16 w-28 md:w-36 rounded-xl px-3 py-2',
 };
 
 const projectMarquee: MarqueeClient[] = [
   // Clients
-  { name: 'Gopisarvepalli', logo: '/clients/gopisarvepalli.svg', blurb: '29 Yrs, 45,000+ Trained', status: 'client' },
-  { name: 'Ganesh Mandadi', logo: '/clients/ganesh-mandadi.svg', blurb: 'Relationship Coach & EI Expert, 109K+ InstaFollowers', status: 'client' },
-  { name: 'Peppty', logo: '/clients/peppty.svg', blurb: '9+ Yrs, Patented Innovations', status: 'client' },
-  { name: 'ChatHub', logo: '/clients/chathub.svg', blurb: '10 yrs, 1.5 Million Users, 1,00,000 MAU', status: 'client' },
-  { name: 'Student Financial Olympiad', logo: '/clients/student-financial-olympiad.svg', blurb: 'US Based Ed-Tech, 300+ Schools', status: 'client' },
-  { name: 'Brindavan Chits', logo: '/clients/brindavan-chits.svg', blurb: '18+ Yrs, 30,000+ Customers, 2500+ Active Customers', status: 'client' },
-  { name: 'Voters Sorter Software', logo: '/clients/voters-sorter.svg', blurb: '19+ Units Sales, 95,000 People Impacted', status: 'client' },
-  { name: 'Zunepson Pharma', logo: '/clients/zunepson-pharma.svg', blurb: '15+ Inhouse Products', status: 'client' },
-  { name: 'Geetha Vidyalayam', logo: '/clients/geetha-vidyalayam.svg', blurb: '42+ Yrs', status: 'client' },
-  { name: 'Muthyala Venu Reddy', logo: '/clients/muthyala-venu-reddy.svg', blurb: 'State Vice President, All India Council of Human Rights, Liberties & Social Justice', status: 'client' },
-  { name: 'Karimnagar Dairy', logo: '/clients/karimnagar-dairy.svg', blurb: '54+ Yrs, 1,00,000+ Farmers, 1,20,000 Litres /day', status: 'client', enterpriseGrade: true },
-  { name: 'Lachava Pickles', logo: '/clients/lachava-pickles.svg', blurb: '5,00,000 Youtube Subscribers', status: 'client' },
-  { name: 'Ananda Kshetram', logo: '/clients/ananda-kshetram.svg', blurb: 'Farm Retreat', status: 'client' },
+  { name: 'Gopisarvepalli', logo: '/clients/gopisarvepalli.svg', blurb: '29 Yrs, 45,000+ Trained', status: 'client', logoShape: 'rect' },
+  { name: 'Ganesh Mandadi', logo: '/clients/ganesh-mandadi.svg', blurb: 'Relationship Coach & EI Expert, 109K+ InstaFollowers', status: 'client', logoShape: 'circle' },
+  { name: 'Peppty', logo: '/clients/peppty.svg', blurb: '9+ Yrs, Patented Innovations', status: 'client', logoShape: 'square' },
+  { name: 'ChatHub', logo: '/clients/chathub.svg', blurb: '10 yrs, 1.5 Million Users, 1,00,000 MAU', status: 'client', logoShape: 'square' },
+  { name: 'Student Financial Olympiad', logo: '/clients/student-financial-olympiad.svg', blurb: 'US Based Ed-Tech, 300+ Schools', status: 'client', logoShape: 'square' },
+  { name: 'Brindavan Chits', logo: '/clients/brindavan-chits.svg', blurb: '18+ Yrs, 30,000+ Customers, 2500+ Active Customers', status: 'client', logoShape: 'rect' },
+  { name: 'Voters Sorter Software', logo: '/clients/voters-sorter.svg', blurb: '19+ Units Sales, 95,000 People Impacted', status: 'client', logoShape: 'square' },
+  { name: 'Zunepson Pharma', logo: '/clients/zunepson-pharma.svg', blurb: '15+ Inhouse Products', status: 'client', logoShape: 'rect' },
+  { name: 'Geetha Vidyalayam', logo: '/clients/geetha-vidyalayam.svg', blurb: '42+ Yrs', status: 'client', logoShape: 'square' },
+  { name: 'Muthyala Venu Reddy', logo: '/clients/muthyala-venu-reddy.svg', blurb: 'State Vice President, All India Council of Human Rights, Liberties & Social Justice', status: 'client', logoShape: 'square' },
+  { name: 'Karimnagar Dairy', logo: '/clients/karimnagar-dairy.svg', blurb: '54+ Yrs, 1,00,000+ Farmers, 1,20,000 Litres /day', status: 'client', logoShape: 'circle' },
+  { name: 'Lachava Pickles', logo: '/clients/lachava-pickles.svg', blurb: '5,00,000 Youtube Subscribers', status: 'client', logoShape: 'square' },
+  { name: 'Ananda Kshetram', logo: '/clients/ananda-kshetram.svg', blurb: 'Farm Retreat', status: 'client', logoShape: 'circle' },
   // Innovation (no logos)
   { name: 'QR Connect', logo: '', blurb: 'Innovation', status: 'innovation' },
   { name: 'Hackathon Management Software', logo: '', blurb: 'Innovation', status: 'innovation' },
   { name: 'Office Governor', logo: '', blurb: '25+ Yrs, 1600+ Clients', status: 'innovation' },
   // Pro Bono AI Solutions
-  { name: 'Vasara Hospital', logo: '/clients/vasara-hospital.svg', blurb: '15+ Yrs, 45000+ Patients Treated', status: 'pro-bono' },
-  { name: 'Sai Krishna Hospital', logo: '/clients/sai-krishna-hospital.svg', blurb: '13+ Yrs, 40,000+ Patients Treated', status: 'pro-bono' },
-  { name: 'Vasara Fuel Station', logo: '/clients/vasara-fuel-station.svg', blurb: '', status: 'pro-bono' },
+  { name: 'Vasara Hospital', logo: '/clients/vasara-hospital.svg', blurb: '15+ Yrs, 45000+ Patients Treated', status: 'pro-bono', logoShape: 'rect' },
+  { name: 'Sai Krishna Hospital', logo: '/clients/sai-krishna-hospital.svg', blurb: '13+ Yrs, 40,000+ Patients Treated', status: 'pro-bono', logoShape: 'rect' },
+  { name: 'Vasara Fuel Station', logo: '/clients/vasara-fuel-station.svg', blurb: '', status: 'pro-bono', logoShape: 'rect' },
   // In Progress (no logos)
   { name: 'Chitfund VRM Software', logo: '', blurb: '24000 Visits per year, 50 Crore + Collection per year', status: 'in-progress', enterpriseGrade: true },
   { name: 'Easy Approvals', logo: '', blurb: '100+ Services', status: 'in-progress' },
   { name: 'Dairy SMS', logo: '', blurb: '68 Dairy Parlours, 150+ products', status: 'in-progress' },
   // Live Startups
-  { name: 'Japam', logo: '/clients/japam.svg', blurb: 'Likhitha Japa Patra, Game, Digital Japa', status: 'startup' },
+  { name: 'Japam', logo: '/clients/japam.svg', blurb: 'Likhitha Japa Patra, Game, Digital Japa', status: 'startup', logoShape: 'square' },
 ];
 
 const logoMarqueeClients = projectMarquee.filter((client) => Boolean(client.logo));
 const clientCountLabel = `${projectMarquee.length}+`;
+
+const aiPlatforms = [
+  { name: 'Cursor', logo: '/PLATFORMS%20AI/cursor.png' },
+  { name: 'Claude', logo: '/PLATFORMS%20AI/Claude_AI_symbol.svg.webp' },
+  { name: 'Codex', logo: '/PLATFORMS%20AI/codex-logo.webp' },
+  { name: 'Antigravity', logo: '/PLATFORMS%20AI/google-antigravity-logo.webp' },
+  { name: 'X AI', logo: '/PLATFORMS%20AI/X%20AI.png' },
+  { name: 'Replit', logo: '/PLATFORMS%20AI/New_Replit_Logo.svg.webp' },
+  { name: 'Emergent', logo: '/PLATFORMS%20AI/Emergent%20Logo%20-%20Colored%20-%20zonalogo.com.svg' },
+  { name: 'Open Code', logo: '/PLATFORMS%20AI/opencode.png' },
+];
 
 const courseMindMap01 = [
   {
@@ -498,7 +516,10 @@ const Home = () => {
             <div className="flex items-center justify-between">
               <Link href="/" className="flex items-center gap-3">
                 <Image src="/logo.png" alt="AI Developer India Logo" width={32} height={32} className="h-8 w-8 rounded-md object-cover" />
-                <span className="text-sm sm:text-base font-semibold text-white/90">AI Developer India</span>
+                <span className="flex flex-col leading-tight -mt-1">
+                  <span className="text-sm sm:text-base font-semibold text-white/90">AI Developer India</span>
+                  <span className="text-[10px] sm:text-xs font-medium text-white/55">(Acceleron Software Lab)</span>
+                </span>
               </Link>
 
               <div className="hidden md:flex items-center gap-6">
@@ -586,10 +607,11 @@ const Home = () => {
       >
         <div className="max-w-6xl mx-auto text-center mb-10">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
-            Relied on by brands across the globe
+            Trusted by organisations that ship with AI
           </h2>
-          <p className="text-white/65 text-base md:text-lg">
-            <span className="text-white font-semibold">{clientCountLabel}</span> clients delivered
+          <p className="text-white/65 text-lg md:text-xl">
+            <span className="text-white font-semibold text-3xl md:text-4xl tracking-tight">{clientCountLabel}</span>{' '}
+            clients delivered
           </p>
         </div>
 
@@ -603,11 +625,15 @@ const Home = () => {
                   key={`${client.name}-${index}`}
                   className="flex w-48 md:w-56 flex-col items-center text-center gap-3"
                 >
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center overflow-hidden shrink-0 bg-white shadow-sm">
+                  <div
+                    className={`flex items-center justify-center overflow-hidden shrink-0 bg-white shadow-sm ${
+                      logoShapeClass[client.logoShape || 'square']
+                    }`}
+                  >
                     <img
                       src={client.logo}
                       alt={`${client.name} logo`}
-                      className="w-12 h-12 md:w-14 md:h-14 object-contain"
+                      className="max-w-full max-h-full w-auto h-auto object-contain"
                       loading="lazy"
                     />
                   </div>
@@ -615,7 +641,7 @@ const Home = () => {
                     <p className="text-base md:text-lg font-semibold text-white leading-tight">
                       {client.name}
                       {client.enterpriseGrade && (
-                        <sup className="ml-1 text-[9px] font-medium tracking-wide text-indigo-300 align-super">
+                        <sup className="ml-1 whitespace-nowrap text-[9px] font-medium tracking-wide text-indigo-300 align-super">
                           Enterprise Grade
                         </sup>
                       )}
@@ -633,6 +659,53 @@ const Home = () => {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section
+        className="relative overflow-hidden py-20 px-4 sm:px-6"
+        style={{ backgroundColor: 'hsl(var(--hero-bg))', color: 'hsl(var(--hero-foreground))' }}
+      >
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-10 left-1/4 w-56 h-56 bg-violet-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-8 right-1/5 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl" />
+        </div>
+
+        <div className="relative max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">
+            Have an idea? Let&apos;s develop and deploy it into reality.
+          </h2>
+          <p className="text-white/70 text-base md:text-lg max-w-2xl mx-auto mb-10">
+            Share your vision. We design, build, and launch production-ready products —
+            accelerated by the leading AI platforms.
+          </p>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6 mb-12">
+            {aiPlatforms.map((platform) => (
+              <div
+                key={platform.name}
+                className="flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-5"
+              >
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-white flex items-center justify-center p-2.5 overflow-hidden">
+                  <img
+                    src={platform.logo}
+                    alt={`${platform.name} logo`}
+                    className="max-w-full max-h-full w-auto h-auto object-contain"
+                    loading="lazy"
+                  />
+                </div>
+                <span className="text-sm md:text-base font-semibold text-white/90">{platform.name}</span>
+              </div>
+            ))}
+          </div>
+
+          <Link
+            href="/contact"
+            className="hero-secondary-btn inline-flex items-center gap-2 px-8 py-4 text-base md:text-lg"
+          >
+            <FiMessageCircle size={18} />
+            Start Your Project
+          </Link>
         </div>
       </section>
 

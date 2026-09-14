@@ -287,36 +287,26 @@
     animation-play-state: paused;
   }
 
-  @keyframes typing {
+  @keyframes hero-line-in {
     from {
-      width: 0;
+      opacity: 0;
+      transform: translateY(6px);
     }
     to {
-      width: 100%;
-    }
-  }
-
-  @keyframes caret-blink {
-    0%, 49% {
-      border-color: rgba(255, 255, 255, 0.85);
-    }
-    50%, 100% {
-      border-color: transparent;
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 
   .hero-typing-line {
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    max-width: 100%;
-    border-right: 2px solid rgba(255, 255, 255, 0.85);
-    animation: typing 2.6s steps(65, end) forwards, caret-blink 0.9s step-end infinite;
+    display: inline;
+    white-space: normal;
+    overflow: visible;
+    animation: hero-line-in 0.8s ease-out forwards;
   }
 
   .hero-typing-line.delay {
-    width: 0;
-    animation-delay: 2.7s, 2.7s;
+    animation-delay: 0.35s;
   }
 
   .course-flip-perspective {
