@@ -95,7 +95,7 @@ const Footer = () => {
         <div className="border-t border-secondary-800 mt-8 sm:mt-12 pt-6 sm:pt-8">
           <div className="text-center">
             <p className="text-secondary-400 text-xs sm:text-sm">
-              © 2014-2025 Aditya Nandagiri. All rights reserved.
+              © 2014-2026 Aditya Nandagiri. All rights reserved.
             </p>
           </div>
         </div>
