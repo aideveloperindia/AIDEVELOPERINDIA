@@ -6,20 +6,47 @@ import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 import { FiEye, FiLinkedin, FiMessageCircle, FiPlay } from 'react-icons/fi';
 
-const projectMarquee = [
-  'Gopisarvepalli',
-  'Ganesh Mandadi',
-  'Peppty',
-  'ChatHub',
-  'SFO',
-  'Japam',
-  'QR Connect',
-  'Brindavan Chits',
-  'AlienTrade',
-  'FruitBox',
-  'Smart Hospitals',
-  'BeyondX POS',
+type MarqueeClient = {
+  name: string;
+  logo: string;
+  blurb: string;
+  status: 'client' | 'in-progress' | 'startup' | 'pro-bono' | 'innovation';
+  enterpriseGrade?: boolean;
+};
+
+const projectMarquee: MarqueeClient[] = [
+  // Clients
+  { name: 'Gopisarvepalli', logo: '/clients/gopisarvepalli.svg', blurb: '29 Yrs, 45,000+ Trained', status: 'client' },
+  { name: 'Ganesh Mandadi', logo: '/clients/ganesh-mandadi.svg', blurb: 'Relationship Coach & EI Expert, 109K+ InstaFollowers', status: 'client' },
+  { name: 'Peppty', logo: '/clients/peppty.svg', blurb: '9+ Yrs, Patented Innovations', status: 'client' },
+  { name: 'ChatHub', logo: '/clients/chathub.svg', blurb: '10 yrs, 1.5 Million Users, 1,00,000 MAU', status: 'client' },
+  { name: 'Student Financial Olympiad', logo: '/clients/student-financial-olympiad.svg', blurb: 'US Based Ed-Tech, 300+ Schools', status: 'client' },
+  { name: 'Brindavan Chits', logo: '/clients/brindavan-chits.svg', blurb: '18+ Yrs, 30,000+ Customers, 2500+ Active Customers', status: 'client' },
+  { name: 'Voters Sorter Software', logo: '/clients/voters-sorter.svg', blurb: '19+ Units Sales, 95,000 People Impacted', status: 'client' },
+  { name: 'Zunepson Pharma', logo: '/clients/zunepson-pharma.svg', blurb: '15+ Inhouse Products', status: 'client' },
+  { name: 'Geetha Vidyalayam', logo: '/clients/geetha-vidyalayam.svg', blurb: '42+ Yrs', status: 'client' },
+  { name: 'Muthyala Venu Reddy', logo: '/clients/muthyala-venu-reddy.svg', blurb: 'State Vice President, All India Council of Human Rights, Liberties & Social Justice', status: 'client' },
+  { name: 'Karimnagar Dairy', logo: '/clients/karimnagar-dairy.svg', blurb: '54+ Yrs, 1,00,000+ Farmers, 1,20,000 Litres /day', status: 'client', enterpriseGrade: true },
+  { name: 'Lachava Pickles', logo: '/clients/lachava-pickles.svg', blurb: '5,00,000 Youtube Subscribers', status: 'client' },
+  { name: 'Ananda Kshetram', logo: '/clients/ananda-kshetram.svg', blurb: 'Farm Retreat', status: 'client' },
+  // Innovation (no logos)
+  { name: 'QR Connect', logo: '', blurb: 'Innovation', status: 'innovation' },
+  { name: 'Hackathon Management Software', logo: '', blurb: 'Innovation', status: 'innovation' },
+  { name: 'Office Governor', logo: '', blurb: '25+ Yrs, 1600+ Clients', status: 'innovation' },
+  // Pro Bono AI Solutions
+  { name: 'Vasara Hospital', logo: '/clients/vasara-hospital.svg', blurb: '15+ Yrs, 45000+ Patients Treated', status: 'pro-bono' },
+  { name: 'Sai Krishna Hospital', logo: '/clients/sai-krishna-hospital.svg', blurb: '13+ Yrs, 40,000+ Patients Treated', status: 'pro-bono' },
+  { name: 'Vasara Fuel Station', logo: '/clients/vasara-fuel-station.svg', blurb: '', status: 'pro-bono' },
+  // In Progress (no logos)
+  { name: 'Chitfund VRM Software', logo: '', blurb: '24000 Visits per year, 50 Crore + Collection per year', status: 'in-progress', enterpriseGrade: true },
+  { name: 'Easy Approvals', logo: '', blurb: '100+ Services', status: 'in-progress' },
+  { name: 'Dairy SMS', logo: '', blurb: '68 Dairy Parlours, 150+ products', status: 'in-progress' },
+  // Live Startups
+  { name: 'Japam', logo: '/clients/japam.svg', blurb: 'Likhitha Japa Patra, Game, Digital Japa', status: 'startup' },
 ];
+
+const logoMarqueeClients = projectMarquee.filter((client) => Boolean(client.logo));
+const clientCountLabel = `${projectMarquee.length}+`;
 
 const courseMindMap01 = [
   {
@@ -481,7 +508,6 @@ const Home = () => {
                 <Link href="/us-clients" className="text-white/90 hover:text-white transition-colors">Business (USA)</Link>
                 <Link href="/innovations" className="text-white/90 hover:text-white transition-colors">Innovations</Link>
                 <Link href="/media" className="text-white/90 hover:text-white transition-colors">Media</Link>
-                <Link href="/spirituality" className="text-white/90 hover:text-white transition-colors">Spirituality</Link>
               </div>
 
               <Link href="/contact" className="hero-secondary-btn rounded-full px-4 py-2 text-sm">
@@ -551,30 +577,64 @@ const Home = () => {
               </div>
             </div>
           </section>
-
-          <section className="pb-10 px-6">
-            <div className="max-w-5xl mx-auto flex flex-col md:flex-row md:items-center gap-6 md:gap-12">
-              <p className="text-white/50 text-sm">
-                Relied on by brands
-                <br />
-                across the globe
-              </p>
-              <div className="overflow-hidden flex-1">
-                <div className="animate-logo-marquee flex items-center gap-16 min-w-max">
-                  {[...projectMarquee, ...projectMarquee].map((name, index) => (
-                    <div key={`${name}-${index}`} className="flex items-center gap-3">
-                      <div className="liquid-glass w-6 h-6 rounded-lg flex items-center justify-center text-xs font-semibold">
-                        {name.charAt(0)}
-                      </div>
-                      <span className="text-base font-semibold text-white">{name}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
         </div>
       </div>
+
+      <section
+        className="relative overflow-hidden py-16 px-4 sm:px-6"
+        style={{ backgroundColor: 'hsl(var(--hero-bg))', color: 'hsl(var(--hero-foreground))' }}
+      >
+        <div className="max-w-6xl mx-auto text-center mb-10">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+            Relied on by brands across the globe
+          </h2>
+          <p className="text-white/65 text-base md:text-lg">
+            <span className="text-white font-semibold">{clientCountLabel}</span> clients delivered
+          </p>
+        </div>
+
+        <div className="relative">
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-16 md:w-24 z-10 bg-gradient-to-r from-[hsl(var(--hero-bg))] to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 md:w-24 z-10 bg-gradient-to-l from-[hsl(var(--hero-bg))] to-transparent" />
+          <div className="overflow-hidden">
+            <div className="animate-logo-marquee flex items-start gap-10 md:gap-14 min-w-max py-2">
+              {[...logoMarqueeClients, ...logoMarqueeClients].map((client, index) => (
+                <div
+                  key={`${client.name}-${index}`}
+                  className="flex w-48 md:w-56 flex-col items-center text-center gap-3"
+                >
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center overflow-hidden shrink-0 bg-white shadow-sm">
+                    <img
+                      src={client.logo}
+                      alt={`${client.name} logo`}
+                      className="w-12 h-12 md:w-14 md:h-14 object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <p className="text-base md:text-lg font-semibold text-white leading-tight">
+                      {client.name}
+                      {client.enterpriseGrade && (
+                        <sup className="ml-1 text-[9px] font-medium tracking-wide text-indigo-300 align-super">
+                          Enterprise Grade
+                        </sup>
+                      )}
+                    </p>
+                    <p className="text-sm md:text-[15px] text-white/75 leading-snug min-h-[3.2em]">
+                      {client.blurb ||
+                        (client.status === 'pro-bono'
+                          ? 'Pro Bono AI Solutions'
+                          : client.status === 'startup'
+                            ? 'Live startup'
+                            : 'Client')}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section
         ref={courseSectionRef}

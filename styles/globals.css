@@ -280,7 +280,11 @@
   }
 
   .animate-logo-marquee {
-    animation: logo-marquee 20s linear infinite;
+    animation: logo-marquee 80s linear infinite;
+  }
+
+  .animate-logo-marquee:hover {
+    animation-play-state: paused;
   }
 
   @keyframes typing {

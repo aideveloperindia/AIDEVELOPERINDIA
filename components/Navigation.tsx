@@ -17,7 +17,6 @@ const Navigation = () => {
     { href: '/software', label: 'Software' },
     { href: '/innovations', label: 'Innovations' },
     { href: '/media', label: 'Media' },
-    { href: '/spirituality', label: 'Spirituality' },
   ];
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
